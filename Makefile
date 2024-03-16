@@ -31,3 +31,7 @@ tf-apply:
 .PHONY: start-vault
 start-vault:
 	vault server -dev
+
+.PHONY: enable-transit
+enable-transit:
+	vault secrets enable transit

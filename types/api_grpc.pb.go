@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	API_CreateWallet_FullMethodName = "/skip_mev.signing.API/CreateWallet"
-	API_GetWallet_FullMethodName    = "/skip_mev.signing.API/GetWallet"
-	API_GetWallets_FullMethodName   = "/skip_mev.signing.API/GetWallets"
-	API_Sign_FullMethodName         = "/skip_mev.signing.API/Sign"
+	API_CreateWallet_FullMethodName    = "/skip_mev.signing.API/CreateWallet"
+	API_GetWallet_FullMethodName       = "/skip_mev.signing.API/GetWallet"
+	API_GetWallets_FullMethodName      = "/skip_mev.signing.API/GetWallets"
+	API_VerifySignature_FullMethodName = "/skip_mev.signing.API/VerifySignature"
+	API_Sign_FullMethodName            = "/skip_mev.signing.API/Sign"
 )
 
 // APIClient is the client API for API service.
@@ -32,6 +33,7 @@ type APIClient interface {
 	CreateWallet(ctx context.Context, in *CreateWalletRequest, opts ...grpc.CallOption) (*CreateWalletResponse, error)
 	GetWallet(ctx context.Context, in *GetWalletRequest, opts ...grpc.CallOption) (*GetWalletResponse, error)
 	GetWallets(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetWalletsResponse, error)
+	VerifySignature(ctx context.Context, in *WalletVerifySignatureRequest, opts ...grpc.CallOption) (*WalletVerifySignatureResponse, error)
 	Sign(ctx context.Context, in *WalletSignatureRequest, opts ...grpc.CallOption) (*WalletSignatureResponse, error)
 }
 
@@ -70,6 +72,15 @@ func (c *aPIClient) GetWallets(ctx context.Context, in *EmptyRequest, opts ...gr
 	return out, nil
 }
 
+func (c *aPIClient) VerifySignature(ctx context.Context, in *WalletVerifySignatureRequest, opts ...grpc.CallOption) (*WalletVerifySignatureResponse, error) {
+	out := new(WalletVerifySignatureResponse)
+	err := c.cc.Invoke(ctx, API_VerifySignature_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *aPIClient) Sign(ctx context.Context, in *WalletSignatureRequest, opts ...grpc.CallOption) (*WalletSignatureResponse, error) {
 	out := new(WalletSignatureResponse)
 	err := c.cc.Invoke(ctx, API_Sign_FullMethodName, in, out, opts...)
@@ -86,6 +97,7 @@ type APIServer interface {
 	CreateWallet(context.Context, *CreateWalletRequest) (*CreateWalletResponse, error)
 	GetWallet(context.Context, *GetWalletRequest) (*GetWalletResponse, error)
 	GetWallets(context.Context, *EmptyRequest) (*GetWalletsResponse, error)
+	VerifySignature(context.Context, *WalletVerifySignatureRequest) (*WalletVerifySignatureResponse, error)
 	Sign(context.Context, *WalletSignatureRequest) (*WalletSignatureResponse, error)
 	mustEmbedUnimplementedAPIServer()
 }
@@ -102,6 +114,9 @@ func (UnimplementedAPIServer) GetWallet(context.Context, *GetWalletRequest) (*Ge
 }
 func (UnimplementedAPIServer) GetWallets(context.Context, *EmptyRequest) (*GetWalletsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWallets not implemented")
+}
+func (UnimplementedAPIServer) VerifySignature(context.Context, *WalletVerifySignatureRequest) (*WalletVerifySignatureResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifySignature not implemented")
 }
 func (UnimplementedAPIServer) Sign(context.Context, *WalletSignatureRequest) (*WalletSignatureResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sign not implemented")
@@ -173,6 +188,24 @@ func _API_GetWallets_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _API_VerifySignature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WalletVerifySignatureRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIServer).VerifySignature(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: API_VerifySignature_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).VerifySignature(ctx, req.(*WalletVerifySignatureRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _API_Sign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WalletSignatureRequest)
 	if err := dec(in); err != nil {
@@ -209,6 +242,10 @@ var API_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWallets",
 			Handler:    _API_GetWallets_Handler,
+		},
+		{
+			MethodName: "VerifySignature",
+			Handler:    _API_VerifySignature_Handler,
 		},
 		{
 			MethodName: "Sign",

@@ -2,12 +2,15 @@ package tests
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/skip-mev/platform-take-home/types"
 	"io"
 	"net/http"
+	"strings"
 	"testing"
+
+	"github.com/skip-mev/platform-take-home/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -34,22 +37,92 @@ func createWallet(name string) (*types.Wallet, error) {
 	}
 
 	var walletResponse struct {
-		Wallet types.Wallet
+		Wallet struct {
+			Name         string `json:"name"`
+			Pubkey       string `json:"pubkey"`       // Now expecting a base64-encoded string
+			AddressBytes string `json:"addressBytes"` // Now expecting a base64-encoded string
+			Address      string `json:"address"`
+		} `json:"wallet"`
 	}
 
 	decBody, err := io.ReadAll(res.Body)
-
 	if err != nil {
 		return nil, err
 	}
 
 	err = json.Unmarshal(decBody, &walletResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	// Decode the base64-encoded pubkey and addressBytes
+	decodedPubkey, err := base64.StdEncoding.DecodeString(walletResponse.Wallet.Pubkey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode pubkey: %w", err)
+	}
+
+	decodedAddressBytes, err := base64.StdEncoding.DecodeString(walletResponse.Wallet.AddressBytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode addressBytes: %w", err)
+	}
+
+	// Constructing the types.Wallet instance with decoded bytes
+	return &types.Wallet{
+		Name:         walletResponse.Wallet.Name,
+		Pubkey:       decodedPubkey,
+		AddressBytes: decodedAddressBytes,
+		Address:      walletResponse.Wallet.Address,
+	}, nil
+}
+
+func getWallet(name string) (*types.Wallet, error) {
+	res, err := http.Get(fmt.Sprintf("http://localhost:8080/wallet/%s", name))
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &walletResponse.Wallet, nil
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("expected status 200, got %d", res.StatusCode)
+	}
+
+	var walletResponse struct {
+		Wallet struct {
+			Name         string `json:"name"`
+			Pubkey       string `json:"pubkey"`       // Now expecting a base64-encoded string
+			AddressBytes string `json:"addressBytes"` // Now expecting a base64-encoded string
+			Address      string `json:"address"`
+		} `json:"wallet"`
+	}
+
+	decBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(decBody, &walletResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	// Decode the base64-encoded pubkey and addressBytes
+	decodedPubkey, err := base64.StdEncoding.DecodeString(walletResponse.Wallet.Pubkey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode pubkey: %w", err)
+	}
+
+	decodedAddressBytes, err := base64.StdEncoding.DecodeString(walletResponse.Wallet.AddressBytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode addressBytes: %w", err)
+	}
+
+	// Constructing the types.Wallet instance with decoded bytes
+	return &types.Wallet{
+		Name:         walletResponse.Wallet.Name,
+		Pubkey:       decodedPubkey,
+		AddressBytes: decodedAddressBytes,
+		Address:      walletResponse.Wallet.Address,
+	}, nil
 }
 
 func TestCreateWallet(t *testing.T) {
@@ -95,27 +168,11 @@ func TestGetWallet(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	res, err := http.Get(fmt.Sprintf("http://localhost:8080/wallet/%s", createWalletName))
+	wallet, err := getWallet(createWalletName)
 
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	if res.StatusCode != http.StatusOK {
-		t.Fatalf("expected status 200, got %d", res.StatusCode)
-	}
-
-	var walletResponse struct {
-		Wallet types.Wallet
-	}
-
-	err = json.NewDecoder(res.Body).Decode(&walletResponse)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	wallet := walletResponse.Wallet
 
 	if wallet.Name != createWalletName {
 		t.Fatalf("expected name %s, got %s", createWalletName, wallet.Name)
@@ -127,6 +184,14 @@ func TestGetWallet(t *testing.T) {
 
 	if wallet.Pubkey == nil {
 		t.Fatalf("expected pubkey %s, got empty", createdWallet.Pubkey)
+	}
+
+	if createdWallet.AddressBytes == nil {
+		t.Fatalf("expected address bytes, got empty")
+	}
+
+	if !bytes.Equal(createdWallet.AddressBytes, wallet.AddressBytes) {
+		t.Fatalf("expected address bytes %x, got %x", createdWallet.AddressBytes, wallet.AddressBytes)
 	}
 
 	if wallet.Address != createdWallet.Address {
@@ -195,15 +260,13 @@ func TestGetWallets(t *testing.T) {
 		t.Fatalf("expected address %s, got empty", wallet.Address)
 	}
 
-	if ourWallet.Address == wallet.Address {
+	if ourWallet.Address != wallet.Address {
 		t.Fatalf("expected address %s, got %s", wallet.Address, ourWallet.Address)
 	}
 
 	if !bytes.Equal(ourWallet.Pubkey, wallet.Pubkey) {
 		t.Fatalf("expected pubkey %x, got %x", wallet.Pubkey, ourWallet.Pubkey)
 	}
-
-	t.Skip("TODO")
 }
 
 func TestCreateWalletMissingName(t *testing.T) {
@@ -225,14 +288,86 @@ func TestGetWalletMissingName(t *testing.T) {
 
 func TestGetNonExistingWallet(t *testing.T) {
 	res, _ := http.Get("http://localhost:8080/wallet/bing_bong")
-
 	if res.StatusCode != 404 {
 		t.Fatal("expected 404 status code, got 200 status code")
 	}
 }
 
-func TestSignature(t *testing.T) {
+func TestSignatureWVault(t *testing.T) {
 	walletName := "test_signature"
+	_, err := createWallet(walletName)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	txBytes := []byte("test_signature")
+
+	req := map[string]any{
+		"wallet_name": walletName,
+		"tx_bytes":    txBytes,
+	}
+
+	reqJson, err := json.Marshal(req)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	res, err := http.Post("http://localhost:8080/sign", "application/json", bytes.NewBuffer(reqJson))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", res.StatusCode)
+	}
+
+	decBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Fatalf("%d", err)
+	}
+	var signatureResponse types.WalletSignatureResponse
+
+	err = json.Unmarshal(decBody, &signatureResponse)
+	if err != nil {
+		t.Fatalf("%d", err)
+	}
+
+	newReq := map[string]any{
+		"wallet_name": walletName,
+		"tx_bytes":    txBytes,
+		"signature":   signatureResponse.Signature,
+	}
+
+	newReqJson, _ := json.Marshal(newReq)
+
+	validationRes, err := http.Post("http://localhost:8080/verify", "application/json", bytes.NewBuffer(newReqJson))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", res.StatusCode)
+	}
+
+	var validationResponse types.WalletVerifySignatureResponse
+
+	err = json.NewDecoder(validationRes.Body).Decode(&validationResponse)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !validationResponse.Valid {
+		t.Fatalf("expected valid signature, got invalid")
+	}
+}
+
+func TestSignature(t *testing.T) {
+	walletName := "test_signature2"
 	wallet, err := createWallet(walletName)
 
 	if err != nil {
@@ -274,9 +409,23 @@ func TestSignature(t *testing.T) {
 		t.Fatalf("expected signature, got empty")
 	}
 
-	pk := pubKeyFromBytes(wallet.Pubkey)
+	pk := pubKeyFromBytes(wallet.AddressBytes)
 
-	verification := VerifySignature(pk, txBytes, signatureResponse.Signature)
+	if pk == nil {
+		t.Fatal("Public key is nil")
+	}
+
+	if pk.X == nil || pk.Y == nil {
+		t.Fatal("Public key coordinates are nil")
+	}
+
+	stripedSignature := strings.TrimPrefix(signatureResponse.Signature, "vault:v1:")
+	decodedSignature, err := base64.StdEncoding.DecodeString(stripedSignature)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	verification := VerifySignature(pk, txBytes, decodedSignature)
 
 	if !verification {
 		t.Fatalf("expected signature verification, got false")

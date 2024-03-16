@@ -351,6 +351,124 @@ func (x *GetWalletsResponse) GetError() *Error {
 	return nil
 }
 
+type WalletVerifySignatureRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	WalletName string `protobuf:"bytes,1,opt,name=wallet_name,json=walletName,proto3" json:"wallet_name,omitempty"`
+	TxBytes    []byte `protobuf:"bytes,2,opt,name=tx_bytes,json=txBytes,proto3" json:"tx_bytes,omitempty"`
+	Signature  string `protobuf:"bytes,3,opt,name=signature,proto3" json:"signature,omitempty"`
+}
+
+func (x *WalletVerifySignatureRequest) Reset() {
+	*x = WalletVerifySignatureRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_api_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WalletVerifySignatureRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WalletVerifySignatureRequest) ProtoMessage() {}
+
+func (x *WalletVerifySignatureRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_api_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WalletVerifySignatureRequest.ProtoReflect.Descriptor instead.
+func (*WalletVerifySignatureRequest) Descriptor() ([]byte, []int) {
+	return file_api_api_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *WalletVerifySignatureRequest) GetWalletName() string {
+	if x != nil {
+		return x.WalletName
+	}
+	return ""
+}
+
+func (x *WalletVerifySignatureRequest) GetTxBytes() []byte {
+	if x != nil {
+		return x.TxBytes
+	}
+	return nil
+}
+
+func (x *WalletVerifySignatureRequest) GetSignature() string {
+	if x != nil {
+		return x.Signature
+	}
+	return ""
+}
+
+type WalletVerifySignatureResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Valid bool   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
+	Error *Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+}
+
+func (x *WalletVerifySignatureResponse) Reset() {
+	*x = WalletVerifySignatureResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_api_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WalletVerifySignatureResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WalletVerifySignatureResponse) ProtoMessage() {}
+
+func (x *WalletVerifySignatureResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_api_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WalletVerifySignatureResponse.ProtoReflect.Descriptor instead.
+func (*WalletVerifySignatureResponse) Descriptor() ([]byte, []int) {
+	return file_api_api_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *WalletVerifySignatureResponse) GetValid() bool {
+	if x != nil {
+		return x.Valid
+	}
+	return false
+}
+
+func (x *WalletVerifySignatureResponse) GetError() *Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 type WalletSignatureRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -363,7 +481,7 @@ type WalletSignatureRequest struct {
 func (x *WalletSignatureRequest) Reset() {
 	*x = WalletSignatureRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[6]
+		mi := &file_api_api_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -376,7 +494,7 @@ func (x *WalletSignatureRequest) String() string {
 func (*WalletSignatureRequest) ProtoMessage() {}
 
 func (x *WalletSignatureRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[6]
+	mi := &file_api_api_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -389,7 +507,7 @@ func (x *WalletSignatureRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WalletSignatureRequest.ProtoReflect.Descriptor instead.
 func (*WalletSignatureRequest) Descriptor() ([]byte, []int) {
-	return file_api_api_proto_rawDescGZIP(), []int{6}
+	return file_api_api_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *WalletSignatureRequest) GetWalletName() string {
@@ -411,14 +529,14 @@ type WalletSignatureResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Signature []byte `protobuf:"bytes,1,opt,name=signature,proto3" json:"signature,omitempty"`
+	Signature string `protobuf:"bytes,1,opt,name=signature,proto3" json:"signature,omitempty"`
 	Error     *Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 }
 
 func (x *WalletSignatureResponse) Reset() {
 	*x = WalletSignatureResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[7]
+		mi := &file_api_api_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -431,7 +549,7 @@ func (x *WalletSignatureResponse) String() string {
 func (*WalletSignatureResponse) ProtoMessage() {}
 
 func (x *WalletSignatureResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[7]
+	mi := &file_api_api_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -444,14 +562,14 @@ func (x *WalletSignatureResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WalletSignatureResponse.ProtoReflect.Descriptor instead.
 func (*WalletSignatureResponse) Descriptor() ([]byte, []int) {
-	return file_api_api_proto_rawDescGZIP(), []int{7}
+	return file_api_api_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *WalletSignatureResponse) GetSignature() []byte {
+func (x *WalletSignatureResponse) GetSignature() string {
 	if x != nil {
 		return x.Signature
 	}
-	return nil
+	return ""
 }
 
 func (x *WalletSignatureResponse) GetError() *Error {
@@ -472,7 +590,7 @@ type Error struct {
 func (x *Error) Reset() {
 	*x = Error{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[8]
+		mi := &file_api_api_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -485,7 +603,7 @@ func (x *Error) String() string {
 func (*Error) ProtoMessage() {}
 
 func (x *Error) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[8]
+	mi := &file_api_api_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -498,7 +616,7 @@ func (x *Error) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Error.ProtoReflect.Descriptor instead.
 func (*Error) Descriptor() ([]byte, []int) {
-	return file_api_api_proto_rawDescGZIP(), []int{8}
+	return file_api_api_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Error) GetMessage() string {
@@ -517,7 +635,7 @@ type EmptyRequest struct {
 func (x *EmptyRequest) Reset() {
 	*x = EmptyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_api_proto_msgTypes[9]
+		mi := &file_api_api_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -530,7 +648,7 @@ func (x *EmptyRequest) String() string {
 func (*EmptyRequest) ProtoMessage() {}
 
 func (x *EmptyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_api_proto_msgTypes[9]
+	mi := &file_api_api_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -543,7 +661,7 @@ func (x *EmptyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmptyRequest.ProtoReflect.Descriptor instead.
 func (*EmptyRequest) Descriptor() ([]byte, []int) {
-	return file_api_api_proto_rawDescGZIP(), []int{9}
+	return file_api_api_proto_rawDescGZIP(), []int{11}
 }
 
 var File_api_api_proto protoreflect.FileDescriptor
@@ -588,6 +706,20 @@ var file_api_api_proto_rawDesc = []byte{
 	0x12, 0x2d, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x17, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69,
 	0x6e, 0x67, 0x2e, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22,
+	0x78, 0x0a, 0x1c, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x53,
+	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x1f, 0x0a, 0x0b, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x4e, 0x61, 0x6d, 0x65,
+	0x12, 0x19, 0x0a, 0x08, 0x74, 0x78, 0x5f, 0x62, 0x79, 0x74, 0x65, 0x73, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0c, 0x52, 0x07, 0x74, 0x78, 0x42, 0x79, 0x74, 0x65, 0x73, 0x12, 0x1c, 0x0a, 0x09, 0x73,
+	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09,
+	0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x22, 0x64, 0x0a, 0x1d, 0x57, 0x61, 0x6c,
+	0x6c, 0x65, 0x74, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
+	0x72, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x69, 0x64,
+	0x12, 0x2d, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x17, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69,
+	0x6e, 0x67, 0x2e, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22,
 	0x54, 0x0a, 0x16, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
 	0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x77, 0x61, 0x6c,
 	0x6c, 0x65, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a,
@@ -596,14 +728,14 @@ var file_api_api_proto_rawDesc = []byte{
 	0x42, 0x79, 0x74, 0x65, 0x73, 0x22, 0x66, 0x0a, 0x17, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x53,
 	0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x12, 0x1c, 0x0a, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0c, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x2d,
+	0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x12, 0x2d,
 	0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e,
 	0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67,
 	0x2e, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x22, 0x21, 0x0a,
 	0x05, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
 	0x22, 0x0e, 0x0a, 0x0c, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x32, 0xba, 0x03, 0x0a, 0x03, 0x41, 0x50, 0x49, 0x12, 0x71, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61,
+	0x32, 0xc3, 0x04, 0x0a, 0x03, 0x41, 0x50, 0x49, 0x12, 0x71, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61,
 	0x74, 0x65, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x12, 0x25, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f,
 	0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x43, 0x72, 0x65, 0x61,
 	0x74, 0x65, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
@@ -623,18 +755,26 @@ var file_api_api_proto_rawDesc = []byte{
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x24, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d,
 	0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x47, 0x65, 0x74, 0x57, 0x61,
 	0x6c, 0x6c, 0x65, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x0f, 0x82,
-	0xd3, 0xe4, 0x93, 0x02, 0x09, 0x12, 0x07, 0x2f, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x12, 0x6d,
-	0x0a, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x12, 0x28, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65,
-	0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74,
-	0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x29, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e,
-	0x69, 0x6e, 0x67, 0x2e, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74,
-	0x75, 0x72, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x10, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x0a, 0x3a, 0x01, 0x2a, 0x22, 0x05, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x42, 0x2e, 0x5a,
-	0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6b, 0x69, 0x70,
-	0x2d, 0x6d, 0x65, 0x76, 0x2f, 0x70, 0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x2d, 0x74, 0x61,
-	0x6b, 0x65, 0x2d, 0x68, 0x6f, 0x6d, 0x65, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0xd3, 0xe4, 0x93, 0x02, 0x09, 0x12, 0x07, 0x2f, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x12, 0x86,
+	0x01, 0x0a, 0x0f, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
+	0x72, 0x65, 0x12, 0x2e, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69,
+	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x56, 0x65, 0x72, 0x69,
+	0x66, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69,
+	0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x56, 0x65, 0x72, 0x69,
+	0x66, 0x79, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x12, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0c, 0x3a, 0x01, 0x2a, 0x22, 0x07,
+	0x2f, 0x76, 0x65, 0x72, 0x69, 0x66, 0x79, 0x12, 0x6d, 0x0a, 0x04, 0x53, 0x69, 0x67, 0x6e, 0x12,
+	0x28, 0x2e, 0x73, 0x6b, 0x69, 0x70, 0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69,
+	0x6e, 0x67, 0x2e, 0x57, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75,
+	0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x73, 0x6b, 0x69, 0x70,
+	0x5f, 0x6d, 0x65, 0x76, 0x2e, 0x73, 0x69, 0x67, 0x6e, 0x69, 0x6e, 0x67, 0x2e, 0x57, 0x61, 0x6c,
+	0x6c, 0x65, 0x74, 0x53, 0x69, 0x67, 0x6e, 0x61, 0x74, 0x75, 0x72, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x10, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0a, 0x3a, 0x01, 0x2a, 0x22,
+	0x05, 0x2f, 0x73, 0x69, 0x67, 0x6e, 0x42, 0x2e, 0x5a, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x6b, 0x69, 0x70, 0x2d, 0x6d, 0x65, 0x76, 0x2f, 0x70, 0x6c,
+	0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x2d, 0x74, 0x61, 0x6b, 0x65, 0x2d, 0x68, 0x6f, 0x6d, 0x65,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -649,40 +789,45 @@ func file_api_api_proto_rawDescGZIP() []byte {
 	return file_api_api_proto_rawDescData
 }
 
-var file_api_api_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_api_api_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_api_api_proto_goTypes = []interface{}{
-	(*Wallet)(nil),                  // 0: skip_mev.signing.Wallet
-	(*CreateWalletRequest)(nil),     // 1: skip_mev.signing.CreateWalletRequest
-	(*CreateWalletResponse)(nil),    // 2: skip_mev.signing.CreateWalletResponse
-	(*GetWalletRequest)(nil),        // 3: skip_mev.signing.GetWalletRequest
-	(*GetWalletResponse)(nil),       // 4: skip_mev.signing.GetWalletResponse
-	(*GetWalletsResponse)(nil),      // 5: skip_mev.signing.GetWalletsResponse
-	(*WalletSignatureRequest)(nil),  // 6: skip_mev.signing.WalletSignatureRequest
-	(*WalletSignatureResponse)(nil), // 7: skip_mev.signing.WalletSignatureResponse
-	(*Error)(nil),                   // 8: skip_mev.signing.Error
-	(*EmptyRequest)(nil),            // 9: skip_mev.signing.EmptyRequest
+	(*Wallet)(nil),                        // 0: skip_mev.signing.Wallet
+	(*CreateWalletRequest)(nil),           // 1: skip_mev.signing.CreateWalletRequest
+	(*CreateWalletResponse)(nil),          // 2: skip_mev.signing.CreateWalletResponse
+	(*GetWalletRequest)(nil),              // 3: skip_mev.signing.GetWalletRequest
+	(*GetWalletResponse)(nil),             // 4: skip_mev.signing.GetWalletResponse
+	(*GetWalletsResponse)(nil),            // 5: skip_mev.signing.GetWalletsResponse
+	(*WalletVerifySignatureRequest)(nil),  // 6: skip_mev.signing.WalletVerifySignatureRequest
+	(*WalletVerifySignatureResponse)(nil), // 7: skip_mev.signing.WalletVerifySignatureResponse
+	(*WalletSignatureRequest)(nil),        // 8: skip_mev.signing.WalletSignatureRequest
+	(*WalletSignatureResponse)(nil),       // 9: skip_mev.signing.WalletSignatureResponse
+	(*Error)(nil),                         // 10: skip_mev.signing.Error
+	(*EmptyRequest)(nil),                  // 11: skip_mev.signing.EmptyRequest
 }
 var file_api_api_proto_depIdxs = []int32{
 	0,  // 0: skip_mev.signing.CreateWalletResponse.wallet:type_name -> skip_mev.signing.Wallet
-	8,  // 1: skip_mev.signing.CreateWalletResponse.error:type_name -> skip_mev.signing.Error
+	10, // 1: skip_mev.signing.CreateWalletResponse.error:type_name -> skip_mev.signing.Error
 	0,  // 2: skip_mev.signing.GetWalletResponse.wallet:type_name -> skip_mev.signing.Wallet
-	8,  // 3: skip_mev.signing.GetWalletResponse.error:type_name -> skip_mev.signing.Error
+	10, // 3: skip_mev.signing.GetWalletResponse.error:type_name -> skip_mev.signing.Error
 	0,  // 4: skip_mev.signing.GetWalletsResponse.wallets:type_name -> skip_mev.signing.Wallet
-	8,  // 5: skip_mev.signing.GetWalletsResponse.error:type_name -> skip_mev.signing.Error
-	8,  // 6: skip_mev.signing.WalletSignatureResponse.error:type_name -> skip_mev.signing.Error
-	1,  // 7: skip_mev.signing.API.CreateWallet:input_type -> skip_mev.signing.CreateWalletRequest
-	3,  // 8: skip_mev.signing.API.GetWallet:input_type -> skip_mev.signing.GetWalletRequest
-	9,  // 9: skip_mev.signing.API.GetWallets:input_type -> skip_mev.signing.EmptyRequest
-	6,  // 10: skip_mev.signing.API.Sign:input_type -> skip_mev.signing.WalletSignatureRequest
-	2,  // 11: skip_mev.signing.API.CreateWallet:output_type -> skip_mev.signing.CreateWalletResponse
-	4,  // 12: skip_mev.signing.API.GetWallet:output_type -> skip_mev.signing.GetWalletResponse
-	5,  // 13: skip_mev.signing.API.GetWallets:output_type -> skip_mev.signing.GetWalletsResponse
-	7,  // 14: skip_mev.signing.API.Sign:output_type -> skip_mev.signing.WalletSignatureResponse
-	11, // [11:15] is the sub-list for method output_type
-	7,  // [7:11] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	10, // 5: skip_mev.signing.GetWalletsResponse.error:type_name -> skip_mev.signing.Error
+	10, // 6: skip_mev.signing.WalletVerifySignatureResponse.error:type_name -> skip_mev.signing.Error
+	10, // 7: skip_mev.signing.WalletSignatureResponse.error:type_name -> skip_mev.signing.Error
+	1,  // 8: skip_mev.signing.API.CreateWallet:input_type -> skip_mev.signing.CreateWalletRequest
+	3,  // 9: skip_mev.signing.API.GetWallet:input_type -> skip_mev.signing.GetWalletRequest
+	11, // 10: skip_mev.signing.API.GetWallets:input_type -> skip_mev.signing.EmptyRequest
+	6,  // 11: skip_mev.signing.API.VerifySignature:input_type -> skip_mev.signing.WalletVerifySignatureRequest
+	8,  // 12: skip_mev.signing.API.Sign:input_type -> skip_mev.signing.WalletSignatureRequest
+	2,  // 13: skip_mev.signing.API.CreateWallet:output_type -> skip_mev.signing.CreateWalletResponse
+	4,  // 14: skip_mev.signing.API.GetWallet:output_type -> skip_mev.signing.GetWalletResponse
+	5,  // 15: skip_mev.signing.API.GetWallets:output_type -> skip_mev.signing.GetWalletsResponse
+	7,  // 16: skip_mev.signing.API.VerifySignature:output_type -> skip_mev.signing.WalletVerifySignatureResponse
+	9,  // 17: skip_mev.signing.API.Sign:output_type -> skip_mev.signing.WalletSignatureResponse
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_api_api_proto_init() }
@@ -764,7 +909,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WalletSignatureRequest); i {
+			switch v := v.(*WalletVerifySignatureRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -776,7 +921,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*WalletSignatureResponse); i {
+			switch v := v.(*WalletVerifySignatureResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -788,7 +933,7 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Error); i {
+			switch v := v.(*WalletSignatureRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -800,6 +945,30 @@ func file_api_api_proto_init() {
 			}
 		}
 		file_api_api_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WalletSignatureResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_api_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Error); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_api_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*EmptyRequest); i {
 			case 0:
 				return &v.state
@@ -818,7 +987,7 @@ func file_api_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_api_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

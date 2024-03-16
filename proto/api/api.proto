@@ -26,6 +26,13 @@ service API {
         };
     }
 
+    rpc VerifySignature(WalletVerifySignatureRequest) returns (WalletVerifySignatureResponse) {
+        option (google.api.http) = {
+            post: "/verify"
+            body: "*"
+        };
+    }
+
     rpc Sign(WalletSignatureRequest) returns (WalletSignatureResponse) {
         option (google.api.http) = {
             post: "/sign",
@@ -64,13 +71,24 @@ message GetWalletsResponse {
     Error error = 2;
 }
 
+message WalletVerifySignatureRequest {
+    string wallet_name = 1;
+    bytes tx_bytes = 2;
+    string signature = 3;
+}
+
+message WalletVerifySignatureResponse {
+    bool valid = 1;
+    Error error = 2;
+}
+
 message WalletSignatureRequest {
     string wallet_name = 1;
     bytes tx_bytes = 2;
 }
 
 message WalletSignatureResponse {
-    bytes signature = 1;
+    string signature = 1;
     Error error = 2;
 }
 

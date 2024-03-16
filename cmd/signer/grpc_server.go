@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"os"
 
+	"github.com/hashicorp/vault/api"
 	apiserver "github.com/skip-mev/platform-take-home/api/server"
 	"github.com/skip-mev/platform-take-home/logging"
 	"github.com/skip-mev/platform-take-home/types"
@@ -18,7 +20,18 @@ func startGRPCServer(ctx context.Context, host string, port int) error {
 
 	server := grpc.NewServer(grpc.UnaryInterceptor(loggingInterceptor))
 
-	types.RegisterAPIServer(server, apiserver.NewDefaultAPIServer(logging.FromContext(ctx)))
+	vault_token := os.Getenv("VAULT_TOKEN")
+
+	vaultClient, err := api.NewClient(&api.Config{
+		Address: "http://127.0.0.1:8200", // Use HTTP here
+	})
+	if err != nil {
+		logging.FromContext(ctx).Fatal("Failed to create Vault client", zap.Error(err))
+	}
+	// Set the Vault token here or use VAULT_TOKEN environment variable
+	vaultClient.SetToken(vault_token)
+
+	types.RegisterAPIServer(server, apiserver.NewDefaultAPIServer(logging.FromContext(ctx), vaultClient))
 
 	reflection.Register(server)
 
