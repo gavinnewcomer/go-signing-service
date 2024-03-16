@@ -1,54 +1,59 @@
-# Skip Platform Engineer - take home
+# Go Signing Service
 
-## Background
+This Go Signing Service utilizes HashiCorp Vault's Transit engine to securely store and manage cryptographic keys. The service provides a robust solution for digital signing, ensuring high security and scalability. Below are the instructions to set up and run the service on your system.
 
-> 🎯 **Goal:** Create a basic remote data signing service that uses the Vault Transit Engine as a secure key-store
+## Overview
 
-You can fork this repo to use as a template for the take-home.
+The Go Signing Service leverages the capabilities of HashiCorp Vault, particularly the Transit secrets engine, to provide secure key management and signing functionalities. This setup ensures that keys are managed securely, with Vault handling cryptographic functions on behalf of the service.
 
-## Outline
+## Running the Service
 
-Our products interact with dozens of blockchains, including signing and submitting transactions to them. We want to be assured that the backing material for these wallets (secp256k1/r1 private keys) do not get exposed publicly or even to Skip employees. 
+To run the Go Signing Service, you will need to open three separate terminal windows or sessions. Follow the instructions in each step carefully, as the setup requires initializing the Vault, configuring the environment, and running the service.
 
-This is possible to accomplish with a remote signing service. The remote signing service for the sake of this exercise needs to support three basic operations: 
+### First Window: Initialize Vault
 
-1.  Create a private/public key pair and address on the Cosmos Hub
-2. Query a public key
-3. Sign transaction bytes
+In the first terminal window, start the Vault server with the following command:
 
-The service should use Vault Transit Engine to store the keys securely at rest. 
+```sh
+make vault-start
+```
+Important: Take note of the Vault address and root token displayed after starting the Vault. These credentials are crucial for subsequent steps.
 
-## Requirements
+### Second Window: Configure the Environment
+In the second terminal window, set the Vault address environment variable to point to the local instance of Vault:
 
-### Features
+```sh
+export VAULT_ADDR='http://127.0.0.1:8200'
+```
+Enable the Transit secrets engine within Vault:
 
-1. Create a Secp256r1 public/private key pair
-2. Returning public keys created by the service
-3. Signing bytes with the private key associated to the wallet
+```sh
+make enable-transit
+```
+Set the Vault token environment variable. Replace <YOUR TOKEN> with the root token you noted earlier:
 
-### API structure
+```sh
+export VAULT_TOKEN="hvs.<YOUR TOKEN>"
+```
+Initialize and apply the Terraform configuration:
 
-The API structure is defined in Protobuf in the given code template. You should not modify the API structure as the given tests depend on the API requests and response being constant.
+```sh
+make tf-init
+make tf-apply
+```
+Build and start the Go Signing Service:
 
-### Vault security
+```sh
+make build; make start
+```
 
-There are requirements to how the local Vault instance should be configured. You can use whichever infrastructure-as-code tool you feel most comfortable with to do this. The requirements for the Vault configuration are as such:
+### Third Window: Test the Service
+To ensure the Go Signing Service is running correctly, execute the following command in the third terminal window:
 
-- There should be an app role that can only interact with the transit engine
-- The app role should be the only one (aside from the root user) that can create, read, update the private keys
-- The private keys should not be exportable or deletable by the app role.
-- The remote signing service should communicate with Vault authenticated as the app role.
+```sh
+make test
+```
+This command will run predefined tests to verify the functionality and connectivity of the service.
 
-### Running tests
-
-To ensure your service passes basic functionality tests, you can run `make test` in the root directory of the service template. This will test your API for basic functionality such as creating a wallet, getting all wallets from the API and validating a signature signed by the service.
-
-## Specific things we’re looking for
-
-1. Familiarity with (or ability to quickly learn) infrastructure-as-code platform such as a Terraform or similar
-2. Familiarity with (or ability to quickly learn) core components of our platform stack, including Vault, Make, etc…
-3. Ability to handle complex problems that stretch across traditional backend services, blockchain transactions/queries, and cloud infrastructure
-4. Capacity to design systems that are readable, extensible, and functional & adhere to reasonable software design principles
-
-> 🆘 Please reach out to us on Telegram (@bpiv400, @magelinskaas) or email (barry@skip.money, zygis@skip.money) if you have any questions.
-
+### Conclusion
+By following these instructions, you should have the Go Signing Service up and running on your system. For further customization or troubleshooting, refer to the detailed documentation of HashiCorp Vault and the Transit secrets engine.
